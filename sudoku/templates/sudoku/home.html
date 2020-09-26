@@ -1,0 +1,51 @@
+{% extends 'sudoku/base.html' %}
+{% load static %}
+{% block content %}
+{% for message in messages %}
+  <div class="alert alert-danger" data-alert="alert" >
+      <a class="close" data-dismiss="alert" href="#">x</a>
+      {{ message }}
+  </div>
+{% endfor %}
+<div align="center">
+  <div class="container">
+    <ol>
+      <li>Place in random numbers based on Sudoku rules to start the game.</li>
+      <li>Click the <strong>SOLVE</strong> button to get the answer to your created game. :)</li>
+      <li>If your input violent the Sudoku rules, an error message would pop up upon clicking the SOLVE button.</li>
+      <li>Click the "Sudoku game on" to start a new game</li>
+    </ol>
+  </div>
+  <form method="POST" name="sudoku_form">
+    {% csrf_token %}
+    <table align="center">
+      {% if not sudoku %}
+      <tbody>
+      {% for i in range %}
+        <tr>
+          {% for j in range %}
+            <td>
+              <input type="number" name="[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}]" value="" class="square" maxlength="1" size="1" min="1", max="9">
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+      {% else %}
+      <tbody>
+      {% for row in sudoku %}
+        <tr>
+          {% for col in row %}
+            <td>
+              <input type="number" name="[{{ forloop.parentloop.counter0 }}][{{ forloop.counter0 }}]" value="{{ col }}" class="square" maxlength="1" size="1" min="1", max="9">
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+      {% endif %}
+    </table>
+    <div class="container" id="solverbutton"><button class="btn btn-dark" type="submit" name="button">Solve</button></div>
+  </form>
+</div>
+{% endblock %}
